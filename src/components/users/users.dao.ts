@@ -11,8 +11,9 @@ export class UsersDao{
     ){}
 
     /**START CREATE USER*/
-    async createUser(){
-        return "test";
+    async createUser(data:any){
+        let newCustomer = await this.repoUser.save(data);
+        return newCustomer;
     }
     /**END CREATE USER*/
 }
