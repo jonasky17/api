@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,6 +9,7 @@ import {
   ApiTags
 } from '@nestjs/swagger'
 import { User } from './entities/user.entity';
+import { HttpExceptionFilter } from 'src/shared/exceptions/http-exception.filter';
 
 @Controller('users')
 export class UsersController {
@@ -20,8 +21,17 @@ export class UsersController {
     status: 204,
     description: 'New user created!'
   })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  // @UseFilters(new HttpExceptionFilter)
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.create(createUserDto)
+    .catch(err => {
+      throw new HttpException({
+        status:500,
+        error:"Something went wrong!",
+        data:[{errorno:err.errno,code:err.code}]
+      },HttpStatus.BAD_REQUEST)
+    });
+    
   }
 
   @Get()

@@ -4,26 +4,20 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './components/users/users.module';
 import { User } from './components/users/entities/user.entity';
-import { LogsModule } from './components/logs/logs.module';
-import { Log } from './components/logs/entities/log.entity';
+import { ConfigModule } from '@nestjs/config';
+import { TypeormConfigService } from './shared/typeorm-config/typeorm-config.service';
+import { EventLogsModule } from './components/event-logs/event-logs.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type:'mysql',
-      host:'localhost',
-      port:3306,
-      username:'root',
-      password:'',
-      database:'tabs_db',
-      entities:[
-        User,
-        Log
-      ],
-      synchronize:true,
+    ConfigModule.forRoot({
+      isGlobal:true
+    }),
+    TypeOrmModule.forRootAsync({
+     useClass:TypeormConfigService
     }),
     UsersModule,
-    LogsModule
+    EventLogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
