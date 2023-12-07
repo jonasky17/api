@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEventLogDto } from './dto/create-event-log.dto';
 import { UpdateEventLogDto } from './dto/update-event-log.dto';
+import { EventLog } from './entities/event-log.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class EventLogsService {
-  create(createEventLogDto: CreateEventLogDto) {
-    return 'This action adds a new eventLog';
+  constructor(
+    @InjectRepository(EventLog)
+    private readonly repoLog: Repository<EventLog>
+  ){}
+  async create(createEventLogDto: CreateEventLogDto) {
+    return await this.repoLog.save(createEventLogDto);
   }
 
   findAll() {

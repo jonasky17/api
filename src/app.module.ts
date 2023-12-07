@@ -7,6 +7,7 @@ import { User } from './components/users/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { TypeormConfigService } from './shared/typeorm-config/typeorm-config.service';
 import { EventLogsModule } from './components/event-logs/event-logs.module';
+import { SuppliersModule } from './components/suppliers/suppliers.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { EventLogsModule } from './components/event-logs/event-logs.module';
     }),
     UsersModule,
     EventLogsModule,
+    SuppliersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
