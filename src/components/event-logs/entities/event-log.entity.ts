@@ -2,7 +2,7 @@ import{PrimaryGeneratedColumn, Column, Entity} from 'typeorm';
 import{ApiProperty} from '@nestjs/swagger/dist';
 
 @Entity()
-export class Log {
+export class EventLog {
     @PrimaryGeneratedColumn()
     id:number;
 

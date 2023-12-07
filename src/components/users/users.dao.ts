@@ -11,8 +11,28 @@ export class UsersDao{
     ){}
 
     /**START CREATE USER*/
-    async createUser(){
-        return "test";
+    async createUser(data:any){
+        return await this.repoUser.save(data);
+        // try{
+        //     let newCustomer = await this.repoUser.save(data);
+        //     return newCustomer;
+        // }catch(error){
+        //     if(error.code === "ER_DUP_ENTRY"){
+        //         // return {
+        //         //     status: "409",
+        //         //     error: "Duplicate Entry",
+        //         //     data: [{ message: error.sqlMessage}]
+        //         //   };
+        //         console.log(error);
+        //         // throw error
+        //         return error;
+        //     }else{
+        //         throw error;
+        //     }
+           
+        // }
+        
+        
     }
     /**END CREATE USER*/
 }
