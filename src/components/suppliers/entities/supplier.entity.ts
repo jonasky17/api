@@ -12,7 +12,7 @@ export class Supplier {
     id: number;
 
     @ApiProperty({ example: "123-456-789-12345", description: "maximum length 32" })
-    @Column({ length: 32, unique: true })
+    @Column({ length: 32, unique: false })
     tin: string
 
     @ApiProperty({ example: "TAB Work Solutions", description: "maximum length 128" })

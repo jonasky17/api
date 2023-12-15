@@ -50,8 +50,10 @@ export class SuppliersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSupplierDto: UpdateSupplierDto) {
-    return this.suppliersService.update(+id, updateSupplierDto);
+ async update(@Param('id') id: string, @Body() data: UpdateSupplierDto) {
+    // console.log(data.name);
+    // return(data);
+    return await this.suppliersService.update(+id, data);
   }
 
   @Delete(':id')
@@ -67,5 +69,13 @@ export class SuppliersController {
   @Get('search/:key')
   async search(@Param('key') key:string){
     return await this.suppliersService.search(key);
+  }
+
+  @Post('upload')
+  async upload(@Body() data){
+    // data.forEach(element => {
+    //   console.log(element.tin)
+    // });
+    return await this.suppliersService.upload(data);
   }
 }

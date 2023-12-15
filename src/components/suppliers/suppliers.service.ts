@@ -43,12 +43,58 @@ export class SuppliersService {
     
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} supplier`;
+  async findOne(id: number) {
+    try{
+      const result = await this.repoSupplier
+      .createQueryBuilder()
+      .where("id = :id", { id: id })
+      .getOne();
+      console.log(result);
+      if(result){
+        return {
+          status:200,
+          error:"",
+          data:result
+        };
+      }else{
+        return {
+          status:404,
+          error:"",
+          data:[{message:"No result found!"}]
+        };
+      }
+    }catch(err){
+      console.log(err)
+      return {
+        status:err.errno,
+        error:err.code,
+        data:[{message:"Something went wrong"}]
+      };
+    }
+    
   }
 
-  update(id: number, updateSupplierDto: UpdateSupplierDto) {
-    return `This action updates a #${id} supplier`;
+  async update(id: number, data: UpdateSupplierDto) {
+    // const formData = {
+    //   tin:updateSupplierDto.tin,
+    //   name:updateSupplierDto.name,
+    //   address:updateSupplierDto.address
+    // }
+    const result = await this.repoSupplier.update(id,data);
+    console.log(result);
+    const logs = {
+      action:"update",
+      description:`updated supplier ${id}`,
+      user_id:0
+    }
+    if(result){
+      const newLog = await this.eventLogsService.create(logs);
+      return{
+        status:200,
+        error:"",
+        data:[{message:"Supplier updated!"}]
+      }
+    }
   }
 
  async remove(id: number) {
@@ -99,5 +145,23 @@ export class SuppliersService {
     .where("tin like :key OR name like :key",{key:`%${key}%`})
     .getMany();
     return result;
+  }
+
+  async upload(data:CreateSupplierDto[]){
+    // console.log(data);
+    const result = await this.repoSupplier.save(data);
+    const logs = {
+      action:"import",
+      description:`imported ${data.length} suppliers`,
+      user_id:0
+    }
+    if(result){
+      const newLog = await this.eventLogsService.create(logs)
+      return {
+        status:200,
+        error:"",
+        data:[{message:"Import success!"}]
+      }
+    }
   }
 }
