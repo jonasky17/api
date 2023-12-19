@@ -16,19 +16,20 @@ export class Profile {
     @Column({length:32, unique:true})
     tin:string;
 
-    @ApiProperty({ example: "TAB Work Solutions", description: "maximum length 128" })
+    @ApiProperty({ example: "TAB Work Solutions", description: "maximum length 128", default: null })
     @Column({length:128, unique:false})
     name: string;
 
-    @ApiProperty({ example: "07 Amistad st., Tropical Island, Benguet 2600", description: "maximum length 256" })
+    @ApiProperty({ example: "07 Amistad st., Tropical Island, Benguet 2600", description: "maximum length 256", default:null })
     @Column({length:256, unique: false, nullable:true})
     address: string;
 
     @DeleteDateColumn()
     deleted_at:Date;
 
-    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    created_at:Date;
+    // @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    @CreateDateColumn({ type: 'timestamp' })
+    created_at:string;
 
     @ApiProperty({ example: "sample@email.com", description: "maximum length 64" })
     @Column({length:64, nullable:true})
@@ -39,6 +40,6 @@ export class Profile {
     contact:string;
 
     @ApiProperty({ example: "01-01-2023", description: "date when business was registered" })
-    @Column({nullable:true})
+    @Column({nullable:true, default:null})
     date_registered:Date;
 }

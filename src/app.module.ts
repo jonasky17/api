@@ -9,6 +9,7 @@ import { TypeormConfigService } from './shared/typeorm-config/typeorm-config.ser
 import { EventLogsModule } from './components/event-logs/event-logs.module';
 import { SuppliersModule } from './components/suppliers/suppliers.module';
 import { ProfilesModule } from './components/profiles/profiles.module';
+import { CoaModule } from './components/coa/coa.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ProfilesModule } from './components/profiles/profiles.module';
     EventLogsModule,
     SuppliersModule,
     ProfilesModule,
+    CoaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import{IsString, IsNotEmpty, IsOptional, IsEmail, IsDate,} from "class-validator";
+import { IsString, IsNotEmpty, IsOptional, IsEmail, IsDate, } from "class-validator";
 import { TransformDate } from "src/transformers/transformDate";
 import { Transform } from "class-transformer";
 
@@ -7,31 +7,31 @@ export class CreateProfileDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    tin:string;
+    tin: string;
 
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    name:string;
+    name: string;
 
     @ApiProperty()
     @IsString()
     @IsOptional()
-    address:string;
+    address: string;
 
     @ApiProperty()
     @IsEmail()
     @IsOptional()
-    email:string;
+    email: string;
 
     @ApiProperty()
     @IsString()
     @IsOptional()
-    contact:string;
+    contact: string;
 
     @ApiProperty()
     @Transform(TransformDate)
     @IsDate()
     @IsOptional()
-    date_registred:Date;
+    date_registered: Date;
 }

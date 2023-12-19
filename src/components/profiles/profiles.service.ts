@@ -17,6 +17,7 @@ export class ProfilesService {
 
   async create(createProfileDto: CreateProfileDto) {
     try {
+      
       const newProfile = await this.repoProfile.save(createProfileDto);
       if (newProfile) {
         const logs = {
