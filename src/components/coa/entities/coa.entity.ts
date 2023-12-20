@@ -13,7 +13,7 @@ export class Coa {
     id:number;
 
     @ApiProperty({ example: "Cash on hand", description: "maximum length 64" })
-    @Column({length:64, unique:true})
+    @Column({length:64, unique:false})
     account_name:string;
 
     @ApiProperty({ example: "Assets", description: "maximum length 64" })
@@ -29,7 +29,7 @@ export class Coa {
     category_code:Number;
 
     @ApiProperty({ example: "Debit", description: "maximum length 16" })
-    @Column({length:16, unique:false})
+    @Column({length:16, unique:false, default:null})
     normal_balance:string;
 
     @DeleteDateColumn()

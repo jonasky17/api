@@ -14,8 +14,8 @@ export class CoaController {
   }
 
   @Get()
-  findAll() {
-    return this.coaService.findAll();
+  async findAll() {
+    return await this.coaService.findAll();
   }
 
   @Get(':id')
@@ -31,5 +31,23 @@ export class CoaController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.coaService.remove(+id);
+  }
+
+  @Get('search/:key')
+  async search(@Param('key') key:string){
+    return await this.coaService.search(key);
+  }
+
+  @Patch('restore/:id')
+  restore(@Param('id') id: string) {
+    return this.coaService.restore(+id);
+  }
+
+  @Post('upload')
+  async upload(@Body() data){
+    // data.forEach(element => {
+    //   console.log(element.tin)
+    // });
+    return await this.coaService.upload(data);
   }
 }

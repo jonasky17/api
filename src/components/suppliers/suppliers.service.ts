@@ -12,66 +12,66 @@ export class SuppliersService {
     @InjectRepository(Supplier)
     private readonly repoSupplier: Repository<Supplier>,
 
-    private readonly eventLogsService:EventLogsService
-  ){}
+    private readonly eventLogsService: EventLogsService
+  ) { }
   async create(createSupplierDto: CreateSupplierDto) {
     const newSupplier = await this.repoSupplier.save(createSupplierDto);
-    if(newSupplier){
+    if (newSupplier) {
       const logs = {
-        action:"created",
-        description:`new supplier ${newSupplier.name}`,
-        user_id:0
+        action: "created",
+        description: `new supplier ${newSupplier.name}`,
+        user_id: 0
       }
       const newLog = await this.eventLogsService.create(logs)
       return {
-        status:200,
-      error:"",
-      data:[{message:`New supplier '${newSupplier.name}' created!`}]
+        status: 200,
+        error: "",
+        data: [{ message: `New supplier '${newSupplier.name}' created!` }]
       }
     }
   }
 
   async findAll() {
     const getAll = await this.repoSupplier.find();
-    if(getAll){
+    if (getAll) {
       return {
-        status:200,
-        error:"",
-        data:getAll
+        status: 200,
+        error: "",
+        data: getAll
       }
     }
-    
+
   }
 
   async findOne(id: number) {
-    try{
+    try {
       const result = await this.repoSupplier
-      .createQueryBuilder()
-      .where("id = :id", { id: id })
-      .getOne();
+        .createQueryBuilder()
+        .where("id = :id", { id: id })
+        .getOne();
       console.log(result);
-      if(result){
+      if (result) {
         return {
-          status:200,
-          error:"",
-          data:result
+          status: 200,
+          error: "",
+          data: result
         };
-      }else{
+      } else {
         return {
-          status:404,
-          error:"",
-          data:[{message:"No result found!"}]
+          status: 404,
+          error: "",
+          data: [{ message: "No result found!" }]
         };
       }
-    }catch(err){
+    } catch (err) {
       console.log(err)
       return {
-        status:err.errno,
-        error:err.code,
-        data:[{message:"Something went wrong"}]
+        status: err.errno,
+        error: err.code,
+        data: [{ message: "Something went wrong" }]
       };
     }
-    
+
   }
 
   async update(id: number, data: UpdateSupplierDto) {
@@ -80,87 +80,87 @@ export class SuppliersService {
     //   name:updateSupplierDto.name,
     //   address:updateSupplierDto.address
     // }
-    const result = await this.repoSupplier.update(id,data);
+    const result = await this.repoSupplier.update(id, data);
     console.log(result);
     const logs = {
-      action:"update",
-      description:`updated supplier ${id}`,
-      user_id:0
+      action: "update",
+      description: `updated supplier ${id}`,
+      user_id: 0
     }
-    if(result){
+    if (result) {
       const newLog = await this.eventLogsService.create(logs);
-      return{
-        status:200,
-        error:"",
-        data:[{message:"Supplier updated!"}]
+      return {
+        status: 200,
+        error: "",
+        data: [{ message: "Supplier updated!" }]
       }
     }
   }
 
- async remove(id: number) {
+  async remove(id: number) {
     const result = await this.repoSupplier
-    .createQueryBuilder()
-    .softDelete()
-    .where("id = :id", { id: id })
-    .execute();
+      .createQueryBuilder()
+      .softDelete()
+      .where("id = :id", { id: id })
+      .execute();
     const logs = {
-      action:"deleted",
-      description:`deleted supplier ${id}`,
-      user_id:0
+      action: "deleted",
+      description: `deleted supplier ${id}`,
+      user_id: 0
     }
-    if(result){
+    if (result) {
       const newLog = await this.eventLogsService.create(logs)
       return {
-        status:200,
-        error:"",
-        data:[{message:"Supplier deleted!"}]
+        status: 200,
+        error: "",
+        data: [{ message: "Supplier deleted!" }]
       };
     }
   }
 
   async restore(id: number) {
     const result = await this.repoSupplier
-    .createQueryBuilder()
-    .restore()
-    .where("id = :id", { id: id })
-    .execute();
+      .createQueryBuilder()
+      .restore()
+      .where("id = :id", { id: id })
+      .execute();
     const logs = {
-      action:"restored",
-      description:`restored supplier ${id}`,
-      user_id:0
+      action: "restored",
+      description: `restored supplier ${id}`,
+      user_id: 0
     }
-    if(result){
+    if (result) {
       const newLog = await this.eventLogsService.create(logs)
       return {
-        status:200,
-        error:"",
-        data:[{message:"Supplier restored!"}]
+        status: 200,
+        error: "",
+        data: [{ message: "Supplier restored!" }]
       };
     }
   }
 
-  async search(key:string){
+  async search(key: string) {
     const result = await this.repoSupplier
-    .createQueryBuilder()
-    .where("tin like :key OR name like :key",{key:`%${key}%`})
-    .getMany();
+      .createQueryBuilder()
+      .where("tin like :key OR name like :key", { key: `%${key}%` })
+      .getMany();
     return result;
   }
 
-  async upload(data:CreateSupplierDto[]){
+  async upload(data: CreateSupplierDto[]) {
     // console.log(data);
     const result = await this.repoSupplier.save(data);
     const logs = {
-      action:"import",
-      description:`imported ${data.length} suppliers`,
-      user_id:0
+      action: "import",
+      description: `imported ${data.length} suppliers`,
+      user_id: 0
     }
-    if(result){
+    if (result) {
       const newLog = await this.eventLogsService.create(logs)
       return {
-        status:200,
-        error:"",
-        data:[{message:"Import success!"}]
+        status: 200,
+        error: "",
+        data: [{ message: "Import success!" }]
       }
     }
   }
