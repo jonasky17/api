@@ -26,7 +26,7 @@ export class SuppliersService {
       return {
         status: 200,
         error: "",
-        data: [{ message: `New supplier '${newSupplier.name}' created!` }]
+        data: [{ message: `New supplier '${newSupplier.name}' created!`, id:newSupplier.id }]
       }
     }
   }

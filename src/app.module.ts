@@ -10,6 +10,7 @@ import { EventLogsModule } from './components/event-logs/event-logs.module';
 import { SuppliersModule } from './components/suppliers/suppliers.module';
 import { ProfilesModule } from './components/profiles/profiles.module';
 import { CoaModule } from './components/coa/coa.module';
+import { ExpensesModule } from './components/expenses/expenses.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CoaModule } from './components/coa/coa.module';
     SuppliersModule,
     ProfilesModule,
     CoaModule,
+    ExpensesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
