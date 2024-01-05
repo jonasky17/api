@@ -2,9 +2,11 @@ import {
     Entity,
     Column,
     PrimaryGeneratedColumn,
-    DeleteDateColumn
+    DeleteDateColumn,
+    OneToMany
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
+import { Expense } from "src/components/expenses/entities/expense.entity";
 
 @Entity()
 export class Supplier {
@@ -25,4 +27,7 @@ export class Supplier {
 
     @DeleteDateColumn()
     deleted_at:Date
+
+    @OneToMany(()=>Expense, expense=>expense.supplier,{nullable:false, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+    expenses: Expense[];
 }

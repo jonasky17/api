@@ -3,9 +3,11 @@ import{
     Column,
     PrimaryGeneratedColumn,
     DeleteDateColumn,
-    CreateDateColumn
+    CreateDateColumn,
+    OneToMany
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
+import { Expense } from "src/components/expenses/entities/expense.entity";
 
 @Entity()
 export class Coa {
@@ -38,5 +40,8 @@ export class Coa {
     // @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     @CreateDateColumn({ type: 'timestamp' })
     created_at:string;
+
+    @OneToMany(()=>Expense, expense=>expense.coa,{nullable:false, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+    expenses: Expense[];
 
 }

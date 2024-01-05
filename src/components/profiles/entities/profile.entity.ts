@@ -3,9 +3,11 @@ import{
     Column,
     PrimaryGeneratedColumn,
     DeleteDateColumn,
-    CreateDateColumn
+    CreateDateColumn,
+    OneToMany
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
+import { Expense } from "src/components/expenses/entities/expense.entity";
 
 @Entity()
 export class Profile {
@@ -42,4 +44,7 @@ export class Profile {
     @ApiProperty({ example: "01-01-2023", description: "date when business was registered" })
     @Column({nullable:true, default:null})
     date_registered:Date;
+
+    @OneToMany(()=>Expense, expense=>expense.profile,{nullable:false, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+    expenses:Expense[];
 }
