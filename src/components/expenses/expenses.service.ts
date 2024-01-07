@@ -132,12 +132,12 @@ export class ExpensesService {
   async findAll(id) {
     try {
       const getAll = await this.repoExpense
-      .createQueryBuilder('e')
-      .leftJoinAndSelect('e.supplier','supplier')
-      .leftJoinAndSelect('e.coa','coa')
-      .leftJoinAndSelect('e.profile','profile')
-      .where('e.profile.id = :id',{id:id})
-      .getMany();
+        .createQueryBuilder('e')
+        .leftJoinAndSelect('e.supplier', 'supplier')
+        .leftJoinAndSelect('e.coa', 'coa')
+        .leftJoinAndSelect('e.profile', 'profile')
+        .where('e.profile.id = :id', { id: id })
+        .getMany();
       if (getAll) {
         return {
           status: 200,
@@ -150,18 +150,31 @@ export class ExpensesService {
     }
   }
 
+  formatDateToCustomString(date) {
+    const isoString = date.toISOString();
+    // Extracting the date and time parts
+    const datePart = isoString.slice(0, 10);
+    const timePart = isoString.slice(11, 19);
+    // Constructing the custom format
+    const customFormat = `${datePart}T${timePart}${isoString.slice(19)}`;
+    return customFormat;
+  }
+
   async findByPeriod(period) {
     const unixTimestamp = period;
     const d = new Date(unixTimestamp * 1000);
-    console.log(d);
+    
+    const currentDate = new Date(d);
+    const formattedDate = this.formatDateToCustomString(currentDate);
+    
     try {
       const getAll = await this.repoExpense
-      .createQueryBuilder('e')
-      .leftJoinAndSelect('e.supplier','supplier')
-      .leftJoinAndSelect('e.coa','coa')
-      .leftJoinAndSelect('e.profile','profile')
-      .where('e.period = :period',{period:d})
-      .getMany();
+        .createQueryBuilder('e')
+        .leftJoinAndSelect('e.supplier', 'supplier')
+        .leftJoinAndSelect('e.coa', 'coa')
+        .leftJoinAndSelect('e.profile', 'profile')
+        .where('e.period = :period', { period: formattedDate })
+        .getMany();
       if (getAll) {
         return {
           status: 200,
