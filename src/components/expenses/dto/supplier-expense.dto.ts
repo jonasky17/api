@@ -19,3 +19,4 @@ export class SupplierExpenseDto extends PartialType(CreateExpenseDto) {
     @IsOptional()
     address:string;
 }
+

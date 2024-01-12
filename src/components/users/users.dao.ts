@@ -23,7 +23,6 @@ export class UsersDao{
         //         //     error: "Duplicate Entry",
         //         //     data: [{ message: error.sqlMessage}]
         //         //   };
-        //         console.log(error);
         //         // throw error
         //         return error;
         //     }else{

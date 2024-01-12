@@ -40,7 +40,6 @@ export class CoaService {
   async findAll() {
     try {
       const result = await this.repoCoa.find();
-      console.log(result);
       return {
         status: 200,
         error: "",
@@ -156,7 +155,6 @@ export class CoaService {
   }
 
   async upload(data: CreateCoaDto[]) {
-    // console.log(data);
     const result = await this.repoCoa.save(data);
     const logs = {
       action: "import",

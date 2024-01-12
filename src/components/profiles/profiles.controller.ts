@@ -10,7 +10,6 @@ export class ProfilesController {
 
   @Post()
   create(@Body() data: CreateProfileDto) {
-    console.log(data)
     return this.profilesService.create(data);
   }
 

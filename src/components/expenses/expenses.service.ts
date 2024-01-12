@@ -29,7 +29,6 @@ export class ExpensesService {
   ) { }
   async create(createExpenseDto: CreateExpenseDto) {
     try {
-      console.log(createExpenseDto);
       const parentProfile = await this.repoProfile
         .createQueryBuilder()
         .where("id = :id", { id: createExpenseDto.profileId })
@@ -74,7 +73,6 @@ export class ExpensesService {
 
   async supplierExpense(supplierExpenseDto: SupplierExpenseDto) {
     try {
-      console.log(supplierExpenseDto);
       const parentProfile = await this.repoProfile
         .createQueryBuilder()
         .where("id = :id", { id: supplierExpenseDto.profileId })
@@ -137,6 +135,7 @@ export class ExpensesService {
         .leftJoinAndSelect('e.coa', 'coa')
         .leftJoinAndSelect('e.profile', 'profile')
         .where('e.profile.id = :id', { id: id })
+        .orderBy('e.id',"DESC")
         .getMany();
       if (getAll) {
         return {
@@ -163,10 +162,10 @@ export class ExpensesService {
   async findByPeriod(period) {
     const unixTimestamp = period;
     const d = new Date(unixTimestamp * 1000);
-    
+
     const currentDate = new Date(d);
     const formattedDate = this.formatDateToCustomString(currentDate);
-    
+
     try {
       const getAll = await this.repoExpense
         .createQueryBuilder('e')
@@ -191,11 +190,135 @@ export class ExpensesService {
     return `This action returns a #${id} expense`;
   }
 
-  update(id: number, updateExpenseDto: UpdateExpenseDto) {
-    return `This action updates a #${id} expense`;
+  async update(id: number, updateExpenseDto: UpdateExpenseDto) {
+    try {
+      const parentProfile = await this.repoProfile
+        .createQueryBuilder()
+        .where("id = :id", { id: updateExpenseDto.profileId })
+        .getOne();
+      const parentCoa = await this.repoCoa
+        .createQueryBuilder()
+        .where("id = :id", { id: updateExpenseDto.coaId })
+        .getOne();
+      const parentSupplier = await this.repoSupplier
+        .createQueryBuilder()
+        .where("id = :id", { id: updateExpenseDto.supplierId })
+        .getOne();
+      const child = new Expense();
+      child.profile = parentProfile;
+      child.coa = parentCoa;
+      child.supplier = parentSupplier;
+      child.comment = updateExpenseDto.comment;
+      child.expense_date = updateExpenseDto.expense_date;
+      child.gross = updateExpenseDto.gross;
+      child.period = updateExpenseDto.period;
+      child.tax_type = updateExpenseDto.tax_type;
+      child.type = updateExpenseDto.type;
+      child.vat = updateExpenseDto.vat;
+      child.vatable = updateExpenseDto.vatable;
+      child.id = id;
+      const result = await this.repoExpense.save(child);
+      if (result) {
+        const logs = {
+          action: "update",
+          description: `updated expense ${id}`,
+          user_id: 0
+        }
+        await this.eventLogsService.create(logs);
+        return {
+          status: 200,
+          error: "",
+          data: [{ message: "Expense updated!" }]
+        }
+      }
+    } catch (err) {
+      throw err
+    }
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} expense`;
+  async updateExpenseSupplier(id: number, supplierExpenseDto: SupplierExpenseDto) {
+    try {
+      const parentProfile = await this.repoProfile
+        .createQueryBuilder()
+        .where("id = :id", { id: supplierExpenseDto.profileId })
+        .getOne();
+      const parentCoa = await this.repoCoa
+        .createQueryBuilder()
+        .where("id = :id", { id: supplierExpenseDto.coaId })
+        .getOne();
+
+      const newSupplier = new Supplier();
+      newSupplier.tin = supplierExpenseDto.tin;
+      newSupplier.address = supplierExpenseDto.address;
+      newSupplier.name = supplierExpenseDto.name;
+      console.log(newSupplier);
+      const parentSupplier = await this.repoSupplier.save(newSupplier);
+      if (parentSupplier) {
+        const logs = {
+          action: "created",
+          description: `New supplier "${parentSupplier.id}"`,
+          user_id: 0
+        }
+        const newLog = await this.eventLogsService.create(logs)
+      }
+
+      const child = new Expense();
+      child.profile = parentProfile;
+      child.coa = parentCoa;
+      child.supplier = parentSupplier;
+      child.comment = supplierExpenseDto.comment;
+      child.expense_date = supplierExpenseDto.expense_date;
+      child.gross = supplierExpenseDto.gross;
+      child.period = supplierExpenseDto.period;
+      child.tax_type = supplierExpenseDto.tax_type;
+      child.type = supplierExpenseDto.type;
+      child.vat = supplierExpenseDto.vat;
+      child.vatable = supplierExpenseDto.vatable;
+      child.id = id;
+      const result = await this.repoExpense.save(child);
+      if (result) {
+        const logs = {
+          action: "update",
+          description: `updated expense ${id}`,
+          user_id: 0
+        }
+        await this.eventLogsService.create(logs);
+        return {
+          status: 200,
+          error: "",
+          data: [{ message: "Expense updated!" }]
+        }
+      }
+    } catch (err) {
+      throw err
+    }
+
+  }
+
+  async remove(id: number) {
+    try {
+      const result = await this.repoExpense
+        .createQueryBuilder()
+        .softDelete()
+        .where("id = :id", { id: id })
+        .execute();
+      if (result) {
+        const logs = {
+          action: "delete",
+          description: `deleted expense ${id}`,
+          user_id: 0
+        }
+        await this.eventLogsService.create(logs);
+        return {
+          status: 200,
+          error: "",
+          data: [{ message: "Expense deleted!" }]
+        }
+      }
+    } catch (err) {
+      throw err;
+    }
+
   }
 }

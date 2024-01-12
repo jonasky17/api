@@ -49,7 +49,6 @@ export class SuppliersService {
         .createQueryBuilder()
         .where("id = :id", { id: id })
         .getOne();
-      console.log(result);
       if (result) {
         return {
           status: 200,
@@ -64,7 +63,6 @@ export class SuppliersService {
         };
       }
     } catch (err) {
-      console.log(err)
       return {
         status: err.errno,
         error: err.code,
@@ -81,7 +79,6 @@ export class SuppliersService {
     //   address:updateSupplierDto.address
     // }
     const result = await this.repoSupplier.update(id, data);
-    console.log(result);
     const logs = {
       action: "update",
       description: `updated supplier ${id}`,
@@ -148,7 +145,6 @@ export class SuppliersService {
   }
 
   async upload(data: CreateSupplierDto[]) {
-    // console.log(data);
     const result = await this.repoSupplier.save(data);
     const logs = {
       action: "import",

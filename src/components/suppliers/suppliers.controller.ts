@@ -51,8 +51,6 @@ export class SuppliersController {
 
   @Patch(':id')
  async update(@Param('id') id: string, @Body() data: UpdateSupplierDto) {
-    // console.log(data.name);
-    // return(data);
     return await this.suppliersService.update(+id, data);
   }
 
@@ -73,9 +71,6 @@ export class SuppliersController {
 
   @Post('upload')
   async upload(@Body() data){
-    // data.forEach(element => {
-    //   console.log(element.tin)
-    // });
     return await this.suppliersService.upload(data);
   }
 }

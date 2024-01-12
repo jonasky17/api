@@ -9,7 +9,6 @@ export class CoaController {
 
   @Post()
   async create(@Body() createCoaDto: CreateCoaDto) {
-    console.log(createCoaDto);
     return await this.coaService.create(createCoaDto);
   }
 
@@ -45,9 +44,6 @@ export class CoaController {
 
   @Post('upload')
   async upload(@Body() data){
-    // data.forEach(element => {
-    //   console.log(element.tin)
-    // });
     return await this.coaService.upload(data);
   }
 }

@@ -35,8 +35,13 @@ export class ExpensesController {
 
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExpenseDto: UpdateExpenseDto) {
-    return this.expensesService.update(+id, updateExpenseDto);
+  async update(@Param('id') id: string, @Body() updateExpenseDto: UpdateExpenseDto) {
+    return await this.expensesService.update(+id, updateExpenseDto);
+  }
+
+  @Patch('supplier/:id')
+  async updateExpenseSupplier(@Param('id') id: string, @Body() supplierExpenseDto: SupplierExpenseDto) {
+    return await this.expensesService.updateExpenseSupplier(+id, supplierExpenseDto);
   }
 
   @Delete(':id')
