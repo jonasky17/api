@@ -7,6 +7,7 @@ import {
     HttpStatus,
   } from '@nestjs/common';
   import { HttpAdapterHost } from '@nestjs/core';
+import { error } from 'console';
   
   @Catch()
   export class AllExceptionsFilter implements ExceptionFilter {
@@ -24,13 +25,28 @@ import {
           ? exception.getStatus()
           : HttpStatus.INTERNAL_SERVER_ERROR;
   
-      const responseBody = {
-        statusCode: httpStatus,
-        error:"Something went wrong",
-        data: [{message:"qweqweqweqwe"}],
-      };
+          const responseBody = {
+            status: httpStatus,
+            error:"Something went wrong",
+            data: [{message:"An unknown error has occured"}],
+          };
+          if(typeof exception === 'object' && exception != null && 'code' in exception){
+            
+            responseBody.error = String(exception.code);
+            responseBody.data = [{message:"Something went wrong"}];
+          }
 
-    //   console.log(ctx.getResponse());
+          if(typeof exception === 'object' && exception != null && 'errno' in exception){
+            responseBody.status = Number(exception.errno);
+            responseBody.data = [{message:"Something went wrong"}];
+          }
+
+          if(typeof exception === 'object' && exception != null && 'sqlMessage' in exception){
+            responseBody.data = [{message:String(exception.sqlMessage)}];
+          }
+      
+
+      console.log(exception);
   
       httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
     }

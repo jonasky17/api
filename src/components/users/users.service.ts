@@ -17,7 +17,6 @@ export class UsersService {
     if (createUserDto.role !== undefined) {
       role = createUserDto.role;
     }
-    console.log("role", role);
 
     const saltOrRounds = 10;
     const password = String(createUserDto.password);
@@ -30,7 +29,6 @@ export class UsersService {
       password: hash,
       role: role
     }
-    console.log("data", data);
     return this.usersDao.createUser(data);
   }
 

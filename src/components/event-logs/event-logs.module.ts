@@ -12,5 +12,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   ],
   controllers: [EventLogsController],
   providers: [EventLogsService],
+  exports: [EventLogsService]
 })
 export class EventLogsModule {}

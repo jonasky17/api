@@ -1,22 +1,20 @@
-import { ApiProperty } from "@nestjs/swagger/dist";
-import { Transform } from "class-transformer";
+import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsNotEmpty, IsOptional } from "class-validator";
 
-
-
-export class CreateUserDto {
+export class CreateSupplierDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    username:string;
-
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    password:string;
+    tin:string;
 
     @ApiProperty()
     @IsString()
     @IsOptional()
-    role:string;
+    name:string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    address:string;
+
 }

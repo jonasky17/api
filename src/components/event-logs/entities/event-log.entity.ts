@@ -1,4 +1,4 @@
-import{PrimaryGeneratedColumn, Column, Entity} from 'typeorm';
+import{PrimaryGeneratedColumn, Column, Entity, CreateDateColumn} from 'typeorm';
 import{ApiProperty} from '@nestjs/swagger/dist';
 
 @Entity()
@@ -17,4 +17,7 @@ export class EventLog {
     @ApiProperty({example:1,description:"user id"})
     @Column()
     user_id:number;
+
+    @CreateDateColumn()
+    created_at:Date;
 }
