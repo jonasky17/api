@@ -159,7 +159,8 @@ export class ExpensesService {
     return customFormat;
   }
 
-  async findByPeriod(period) {
+  async findByPeriod(id,period) {
+    
     const unixTimestamp = period;
     const d = new Date(unixTimestamp * 1000);
 
@@ -173,6 +174,7 @@ export class ExpensesService {
         .leftJoinAndSelect('e.coa', 'coa')
         .leftJoinAndSelect('e.profile', 'profile')
         .where('e.period = :period', { period: formattedDate })
+        .andWhere('e.profileId = :profileId',{profileId: id})
         .getMany();
       if (getAll) {
         return {

@@ -6,7 +6,7 @@ import { SupplierExpenseDto } from './dto/supplier-expense.dto';
 
 @Controller('expenses')
 export class ExpensesController {
-  constructor(private readonly expensesService: ExpensesService) {}
+  constructor(private readonly expensesService: ExpensesService) { }
 
   @Post()
   create(@Body() createExpenseDto: CreateExpenseDto) {
@@ -19,13 +19,18 @@ export class ExpensesController {
   }
 
   @Get('summary/:id')
-  async findAll(@Param('id')id:Number) {
+  async findAll(@Param('id') id: Number) {
     return await this.expensesService.findAll(id);
   }
 
-  @Get('export/:period')
-  async findByPeriod(@Param('period') period:string) {
-    return await this.expensesService.findByPeriod(period);
+  @Get('export/:id/:period')
+  async findByPeriod(
+    @Param('id') id: number,
+    @Param('period') period: string
+    ) {
+      console.log(period);
+      console.log(id);
+    return await this.expensesService.findByPeriod(id,period);
   }
 
   @Get(':id')
